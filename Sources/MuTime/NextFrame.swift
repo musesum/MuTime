@@ -8,14 +8,15 @@ public protocol NextFrameDelegate {
 public class NextFrame {
 
     public static let shared = NextFrame()
+    public var fps: TimeInterval { TimeInterval(preferredFps) }
 
+    private var preferredFps = 60
     private var link: CADisplayLink?
-    private var fps = 60
     private var delegates = [Int: NextFrameDelegate]()
 
     public init() {
         link = UIScreen.main.displayLink(withTarget: self, selector: #selector(nextFrames))
-        link?.preferredFramesPerSecond = fps
+        link?.preferredFramesPerSecond = preferredFps
         link?.add(to: RunLoop.current, forMode: .default)
     }
 
@@ -25,9 +26,9 @@ public class NextFrame {
     }
     public func updateFps(_ newFps: Int?) {
         if let newFps,
-            fps != newFps {
-            fps = newFps
-            link?.preferredFramesPerSecond = fps
+            preferredFps != newFps {
+            preferredFps = newFps
+            link?.preferredFramesPerSecond = preferredFps
         }
     }
 
