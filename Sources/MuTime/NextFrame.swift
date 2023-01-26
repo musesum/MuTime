@@ -10,6 +10,7 @@ public class NextFrame {
     public static let shared = NextFrame()
     public var fps: TimeInterval { TimeInterval(preferredFps) }
 
+    private var lock = NSLock()
     private var preferredFps = 60
     private var link: CADisplayLink?
     private var delegates = [Int: NextFrameDelegate]()
@@ -22,7 +23,9 @@ public class NextFrame {
 
     public func addFrameDelegate(_ hash: Int,
                                  _ delegate: NextFrameDelegate) {
+        lock.lock()
         delegates[hash] = delegate
+        lock.unlock()
     }
     public func updateFps(_ newFps: Int?) {
         if let newFps,
@@ -36,7 +39,9 @@ public class NextFrame {
 
         for (key,delegate) in delegates {
             if delegate.nextFrame() == false {
+                lock.lock()
                 delegates.removeValue(forKey: key)
+                lock.unlock()
             }
         }
         return true
