@@ -14,6 +14,7 @@ public class DoubleBuffer<Item> {
     private var bufs: [[Item]]
     private var indexNow = 0
     private var timer: Timer?
+    private var lock = NSLock()
 
     public var flusher: (any BufferFlushDelegate)?
 
@@ -47,7 +48,9 @@ public class DoubleBuffer<Item> {
     }
 
     public func append(_ item: Item) {
+        lock.lock()
         bufs[indexNow].append(item)
+        lock.unlock()
     }
 
     func bufferLoop() {
