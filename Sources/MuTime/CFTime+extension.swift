@@ -22,8 +22,7 @@ public func Looper (_ duration: CFAbsoluteTime,
         if factor == 0 || remainTime <= 0 {
             timer?.invalidate()
             completion?()
-        }
-        else {
+        } else {
             looping(CGFloat(factor))
         }
     }
