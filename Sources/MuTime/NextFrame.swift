@@ -21,11 +21,12 @@ public class NextFrame {
         link?.add(to: RunLoop.current, forMode: .default)
     }
 
-    public func addFrameDelegate(_ hash: Int,
+    public func addFrameDelegate(_ key: Int,
                                  _ delegate: NextFrameDelegate) {
         lock.lock()
-        delegates[hash] = delegate
+        delegates[key] = delegate
         lock.unlock()
+        print("􀿏+(\(key))🔰")
     }
     public func updateFps(_ newFps: Int?) {
         if let newFps,
@@ -42,6 +43,7 @@ public class NextFrame {
                 lock.lock()
                 delegates.removeValue(forKey: key)
                 lock.unlock()
+                print("􀿏-(\(key))🔺")
             }
         }
         return true
