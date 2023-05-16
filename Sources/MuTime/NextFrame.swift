@@ -21,6 +21,14 @@ public class NextFrame {
         link?.add(to: RunLoop.current, forMode: .default)
     }
 
+    public func updateFps(_ newFps: Int?) {
+        if let newFps,
+           preferredFps != newFps {
+            preferredFps = newFps
+            link?.preferredFramesPerSecond = preferredFps
+        }
+    }
+
     public func addFrameDelegate(_ key: Int,
                                  _ delegate: NextFrameDelegate) {
         lock.lock()
@@ -28,22 +36,18 @@ public class NextFrame {
         lock.unlock()
         print("􀿏+(\(key))🔰")
     }
-    public func updateFps(_ newFps: Int?) {
-        if let newFps,
-            preferredFps != newFps {
-            preferredFps = newFps
-            link?.preferredFramesPerSecond = preferredFps
-        }
+    public func removeDelegate(_ key: Int) {
+        lock.lock()
+        delegates.removeValue(forKey: key)
+        lock.unlock()
+        print("􀿏-(\(key))🔺")
     }
 
     @objc func nextFrames() -> Bool  {
 
         for (key,delegate) in delegates {
             if delegate.nextFrame() == false {
-                lock.lock()
-                delegates.removeValue(forKey: key)
-                lock.unlock()
-                print("􀿏-(\(key))🔺")
+                removeDelegate(key)
             }
         }
         return true
