@@ -34,13 +34,13 @@ public class NextFrame {
         lock.lock()
         delegates[key] = delegate
         lock.unlock()
-        print("􀿏+(\(key))🔰")
+        print("􀿏[\(key)]🔰")
     }
     public func removeDelegate(_ key: Int) {
         lock.lock()
         delegates.removeValue(forKey: key)
         lock.unlock()
-        print("􀿏-(\(key))🔺")
+        print("􀿏[\(key)]🔺")
     }
 
     @objc func nextFrames() -> Bool  {
