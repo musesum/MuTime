@@ -16,6 +16,7 @@ public class NextFrame {
     private var delegates = [Int: NextFrameDelegate]()
 
     public init() {
+        //??? link = CADisplayLink(target: self, selector: #selector(nextFrames))
         link = UIScreen.main.displayLink(withTarget: self, selector: #selector(nextFrames))
         link?.preferredFramesPerSecond = preferredFps
         link?.add(to: RunLoop.current, forMode: .default)
