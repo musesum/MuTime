@@ -10,11 +10,13 @@ public class NextFrame {
 
     public static let shared = NextFrame()
     public var fps: TimeInterval { TimeInterval(preferredFps) }
-
+    public var pause = false
+    
     private var lock = NSLock()
     private var preferredFps = 60
     private var link: CADisplayLink?
     private var delegates = [Int: NextFrameDelegate]()
+
 
     public init() {
         link = CADisplayLink(target: self, selector: #selector(nextFrames))
@@ -45,7 +47,7 @@ public class NextFrame {
     }
 
     @objc func nextFrames() -> Bool  {
-
+        guard !pause else { return false }
         for (key,delegate) in delegates {
             if delegate.nextFrame() == false {
                 removeDelegate(key)
